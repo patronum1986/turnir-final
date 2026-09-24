@@ -20,12 +20,20 @@ const old=JSON.stringify(S.site);c.updatePeopleSort({mode:'name'});c.movePerson(
 c.renderPeople();assert.ok(!$('view-people').innerHTML.includes('id="peopleSortMode"'));assert.ok(!$('view-people').innerHTML.includes('data-move-person='));
 S.q='Борис';c.renderPeople();assert.ok(!$('view-people').innerHTML.includes('Яков'));assert.ok(!$('view-people').innerHTML.includes('Анна'));S.q='';
 S.role='admin';S.edit=true;c.updatePeopleSort({mode:'house',selfFirst:false});assert.deepEqual(ids(),['p1','p2','p3']);
+c.renderPeople();assert.equal(($('view-people').innerHTML.match(/<section class="group">/g)||[]).length,1);
+c.updatePeopleSort({groupHouses:true});c.renderPeople();assert.equal(($('view-people').innerHTML.match(/<section class="group">/g)||[]).length,3);
+c.updatePeopleSort({groupHouses:false});c.renderPeople();assert.equal(($('view-people').innerHTML.match(/<section class="group">/g)||[]).length,1);
+S.role='participant';S.edit=false;c.renderPeople();assert.ok(!$('view-people').innerHTML.includes('id="peopleGroupHouses"'));
+S.site.peopleSort.groupHouses=true;c.renderPeople();assert.equal(($('view-people').innerHTML.match(/<section class="group">/g)||[]).length,3);
+S.site.peopleSort.selfFirst=true;c.renderPeople();assert.equal(($('view-people').innerHTML.match(/<section class="group">/g)||[]).length,3);assert.equal(($('view-people').innerHTML.match(/Анна/g)||[]).length,1);
+S.site.peopleSort.selfFirst=false;S.site.peopleSort.groupHouses=false;
 S.role='participant';S.edit=false;S.houses.mode='draw';assert.deepEqual(ids(),['p2','p3','p1']);
 S.role='admin';S.edit=true;c.updatePeopleSort({mode:'manual'});assert.deepEqual(ids(),['p1','p3','p2']);
 S.people.push({id:'p4',code:'c4',name:'Аарон'});assert.deepEqual(ids(),['p1','p3','p2','p4']);S.people[0].name='Юрий';assert.equal(ids()[0],'p1');
 S.q='Юрий';c.movePerson('p1',1);assert.equal(ids()[0],'p1');S.q='';
 c.renderPeople();assert.ok($('view-people').innerHTML.includes('id="peopleSortMode"'));assert.ok($('view-people').innerHTML.includes('data-move-person='));
 for(const peopleSort of [{mode:'bad',selfFirst:false,order:[]},{mode:'manual',selfFirst:'true',order:[]},{mode:'manual',selfFirst:false,order:['p1','p1']}])assert.ok(validate('site',{contacts:[],peopleSort}));
+assert.ok(validate('site',{contacts:[],peopleSort:{mode:'house',selfFirst:false,order:[],groupHouses:'true'}}));
 assert.equal(validate('site',{contacts:[]}),null);assert.equal(validate('site',{contacts:[],peopleSort:S.site.peopleSort}),null);
 const projected=participantView({participants:{people:S.people},houses:S.houses,site:S.site},S.people[1],Date.now()+10000);assert.deepEqual(projected.site.peopleSort,S.site.peopleSort);assert.equal(projected.participants.people[1].id,'p2');
 // English edits must save the shared settings rather than a translation overlay.

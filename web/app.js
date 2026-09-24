@@ -494,7 +494,7 @@ async function loadPeople() {
 
 // Participant ordering is shared; only organisers can change its settings.
 function peopleSortSettings() {
-  return Object.assign({ mode: "name", selfFirst: false, order: [] }, S.site?.peopleSort || {});
+  return Object.assign({ mode: "name", selfFirst: false, groupHouses: false, order: [] }, S.site?.peopleSort || {});
 }
 function manualPeopleOrder(people, order) {
   const rank = new Map(order.map((id, i) => [id, i]));
@@ -556,7 +556,7 @@ function renderPeople() {
     ${S.edit ? `<div class="acts"><button class="icobtn" data-pedit="${esc(p.id)}" aria-label="Изменить"><svg viewBox="0 0 24 24"><path d="M3 17.3V21h3.7L17.8 9.9l-3.7-3.7zm17.7-10.2a1 1 0 0 0 0-1.4l-2.4-2.4a1 1 0 0 0-1.4 0l-1.8 1.8 3.7 3.7z"/></svg></button><button class="icobtn" data-pdel="${esc(p.id)}" aria-label="Удалить"><svg viewBox="0 0 24 24"><path d="M6 19a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7H6zM19 4h-3.5l-1-1h-5l-1 1H5v2h14z"/></svg></button></div>` : ""}</div>`;
   }).join("");
   let orderedBody = `<section class="group">${rows(sorted)}</section>`;
-  if (sortMode === "house") {
+  if (sortMode === "house" && settings.groupHouses) {
     const pinned = settings.selfFirst && !(org && S.edit) ? sorted.find(p => p.code && p.code === S.code) : null;
     const rest = sorted.filter(p => p !== pinned);
     orderedBody = pinned ? `<section class="group">${rows([pinned])}</section>` : "";
@@ -596,7 +596,7 @@ function renderPeople() {
 
   el.innerHTML = `<div class="sec"><div class="sec-head"><h1>Участники</h1>${isOrg() ? sectionToggle("people") : `<span class="cnt">${S.people.length}</span>`}</div>
     ${draft}${edit}
-    ${org && S.edit ? `<div class="form people-sort"><label for="peopleSortMode">Порядок участников</label><select id="peopleSortMode">${[["name", "По ФИО"], ["house", "По Домам, затем по ФИО"], ["manual", "Ручной порядок"]].map(([value, label]) => `<option value="${value}" ${settings.mode === value ? "selected" : ""}>${label}</option>`).join("")}</select><label class="chk"><input type="checkbox" id="peopleSelfFirst" ${settings.selfFirst ? "checked" : ""}> Показывать текущего участника первым</label>${ordering ? `<p>Меняйте порядок кнопками ↑ ↓. Для перестановки очистите поиск. Новые участники добавляются в конец.</p>` : ""}</div>` : ""}
+    ${org && S.edit ? `<div class="form people-sort"><label for="peopleSortMode">Порядок участников</label><select id="peopleSortMode">${[["name", "По ФИО"], ["house", "По Домам, затем по ФИО"], ["manual", "Ручной порядок"]].map(([value, label]) => `<option value="${value}" ${settings.mode === value ? "selected" : ""}>${label}</option>`).join("")}</select><label class="chk"><input type="checkbox" id="peopleSelfFirst" ${settings.selfFirst ? "checked" : ""}> Показывать текущего участника первым</label><label class="chk"><input type="checkbox" id="peopleGroupHouses" ${settings.groupHouses ? "checked" : ""} ${settings.mode !== "house" ? "disabled" : ""}> Показывать команды отдельными блоками</label><p>Блоки доступны при сортировке по Домам.</p>${ordering ? `<p>Меняйте порядок кнопками ↑ ↓. Для перестановки очистите поиск. Новые участники добавляются в конец.</p>` : ""}</div>` : ""}
     ${form}${tools}
     <input class="search" type="search" id="pq" placeholder="Поиск по имени или банку" value="${esc(S.q)}">
     ${body}</div>`;
@@ -606,6 +606,8 @@ function renderPeople() {
   el.querySelectorAll("[data-move-person]").forEach(button => {
     button.onclick = () => movePerson(button.dataset.movePerson, Number(button.dataset.direction));
   });
+  const groupControl = $("peopleGroupHouses");
+  if (groupControl) groupControl.onchange = () => updatePeopleSort({ groupHouses: groupControl.checked });
   const pq = $("pq"); pq.oninput = () => { const pos = pq.selectionStart; S.q = pq.value; renderPeople(); const n = $("pq"); n.focus(); n.setSelectionRange(pos, pos); };
   const ph = $("pphoto"); if (ph) ph.onchange = () => ph.files[0] && shrinkPhoto(ph.files[0]).then((d) => { S.photo = d; renderPeople(); }).catch(() => toast("Не удалось открыть фото"));
   const pi = $("pimport"); if (pi) pi.onchange = () => pi.files[0] && importPeople(pi.files[0]);

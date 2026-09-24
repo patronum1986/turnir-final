@@ -2,6 +2,7 @@
 const EnglishUI = (() => {
  let language='ru';
  const dictionary={
+ 'Показывать команды отдельными блоками':'Show Houses as separate sections','Блоки доступны при сортировке по Домам.':'Sections are available when sorting by House.',
  'Порядок участников':'Participant order','По ФИО':'By name','По Домам, затем по ФИО':'By House, then name','Ручной порядок':'Manual order','Показывать текущего участника первым':'Show the current participant first','Без Дома':'No House','Поднять участника':'Move participant up','Опустить участника':'Move participant down','Меняйте порядок кнопками ↑ ↓. Для перестановки очистите поиск. Новые участники добавляются в конец.':'Use ↑ ↓ to reorder. Clear the search before reordering. New participants are added at the end.',
 
  'Программа':'Programme','Участники':'Participants','Контакты':'Contacts','Отели':'Hotels','вы':'you','День':'Day',

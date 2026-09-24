@@ -26,7 +26,7 @@ export function validate(kind, b, translated = false) {
   if (kind === "site") {
     if (b.peopleSort !== undefined) {
       const s = b.peopleSort;
-      if (!object(s) || !["name", "house", "manual"].includes(s.mode) || typeof s.selfFirst !== "boolean" || !Array.isArray(s.order) || s.order.length > 10000 || !s.order.every(id => typeof id === "string" && /^[A-Za-z0-9_-]{1,64}$/.test(id)) || new Set(s.order).size !== s.order.length) return "Некорректная сортировка участников";
+      if (!object(s) || !["name", "house", "manual"].includes(s.mode) || typeof s.selfFirst !== "boolean" || (s.groupHouses !== undefined && typeof s.groupHouses !== "boolean") || !Array.isArray(s.order) || s.order.length > 10000 || !s.order.every(id => typeof id === "string" && /^[A-Za-z0-9_-]{1,64}$/.test(id)) || new Set(s.order).size !== s.order.length) return "Некорректная сортировка участников";
     }
     if(b.englishEnabled!==undefined&&typeof b.englishEnabled!=='boolean')return 'Некорректная настройка языка';
     if (b.contactNote !== undefined && (typeof b.contactNote !== "string" || b.contactNote.length > 5000)) return "Некорректный текст контактов";

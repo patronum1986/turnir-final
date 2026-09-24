@@ -1,6 +1,6 @@
 // Only the public application shell is cached here. Personal data is an explicit,
 // time-limited participant snapshot; protected media is downloaded to IndexedDB.
-const CACHE='drakon-secure-shell-rf-20260924-sorting-1';
+const CACHE='drakon-secure-shell-rf-20260924-sorting-2';
 const SHELL=['/','/index.html','/app.js','/i18n.js','/english.js','/app-icons.js','/style.css','/manifest.json','/assets/favicon.png','/assets/apple-touch-icon.png','/assets/icon-192.png','/assets/icon-512.png',
 'assets/fonts/montserrat-cyrillic-400-normal.woff2','assets/fonts/montserrat-cyrillic-600-normal.woff2','assets/fonts/montserrat-cyrillic-700-normal.woff2','assets/fonts/montserrat-latin-400-normal.woff2','assets/fonts/montserrat-latin-600-normal.woff2','assets/fonts/montserrat-latin-700-normal.woff2','assets/fonts/oswald-cyrillic-300-normal.woff2','assets/fonts/oswald-cyrillic-400-normal.woff2','assets/fonts/oswald-latin-300-normal.woff2','assets/fonts/oswald-latin-400-normal.woff2'];
 self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(SHELL)).then(()=>self.skipWaiting())));
