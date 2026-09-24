@@ -1,0 +1,89 @@
+{
+  "updated": "2026-09-14",
+  "enabled": true,
+  "ceremony": {
+    "cardTitle": "Путешествие начинается прямо сейчас",
+    "cardText": "Выберите свой Дом Дракона.",
+    "cardButton": "Тянуть жребий",
+    "title": "Жребий Дракона",
+    "intro": "Пять Домов ждут своих людей. Каждый год Дракон сам выбирает, кому под чьим знаменем идти. Перед вами пять свитков — все одинаковы, и лишь один ваш.",
+    "introButton": "Я готов",
+    "pick": "Выберите свиток",
+    "result": "Ваш дом",
+    "button": "В путь",
+    "scrollImg": "assets/houses/scroll.webp",
+    "en": {
+      "cardTitle": "Your journey starts now",
+      "cardText": "Discover your Dragon House.",
+      "cardButton": "Draw your lot",
+      "title": "Dragon draw",
+      "intro": "Five Houses await their people. Every year, the Dragon decides who will follow each banner. Before you are five identical scrolls — and only one is yours.",
+      "introButton": "I am ready",
+      "pick": "Choose a scroll",
+      "result": "Your house",
+      "button": "Let’s go"
+    }
+  },
+  "houses": [
+    {
+      "id": "jade",
+      "name": "Дом Нефритового Дракона",
+      "motto": "Истинная ценность — внутри.",
+      "color": "#1E8A5B",
+      "icon": "assets/houses/jade.webp",
+      "en": {
+        "name": "Jade Dragon House",
+        "motto": "True value lies within."
+      }
+    },
+    {
+      "id": "gold",
+      "name": "Дом Золотого Дракона",
+      "motto": "Стремимся к большему.",
+      "color": "#C9931A",
+      "icon": "assets/houses/gold.webp",
+      "en": {
+        "name": "Golden Dragon House",
+        "motto": "We strive for more."
+      }
+    },
+    {
+      "id": "sky",
+      "name": "Дом Небесного Дракона",
+      "motto": "Для нас нет недостижимых высот.",
+      "color": "#3F8FD6",
+      "icon": "assets/houses/sky.webp",
+      "en": {
+        "name": "Sky Dragon House",
+        "motto": "No height is beyond our reach."
+      }
+    },
+    {
+      "id": "fire",
+      "name": "Дом Огненного Дракона",
+      "motto": "Энергия превращает идеи в действие.",
+      "color": "#E0301E",
+      "icon": "assets/houses/fire.webp",
+      "en": {
+        "name": "Fire Dragon House",
+        "motto": "Energy turns ideas into action."
+      }
+    },
+    {
+      "id": "wise",
+      "name": "Дом Мудрого Дракона",
+      "motto": "Видеть главное. Выбирать верное.",
+      "color": "#4A3AA8",
+      "icon": "assets/houses/wise.webp",
+      "en": {
+        "name": "Wise Dragon House",
+        "motto": "See what matters. Choose wisely."
+      }
+    }
+  ],
+  "assign": {
+    "test1": "fire",
+    "test2": "jade",
+    "test3": "sky"
+  }
+}

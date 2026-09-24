@@ -1,0 +1,27 @@
+{
+  "name": "Путь Дракона — Группа РФ",
+  "short_name": "Дракон РФ",
+  "description": "Программа поездки Турнира лидеров 2026 и аудиозадания на каждый день. Работает без интернета.",
+  "lang": "ru",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#FFFFFF",
+  "theme_color": "#FF0A3C",
+  "icons": [
+    {
+      "src": "assets/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "id": "/drakon-rf"
+}

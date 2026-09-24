@@ -1,0 +1,166 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: drakon-rf
+  labels:
+    pod-security.kubernetes.io/enforce: restricted
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: drakon-state
+  namespace: drakon-rf
+spec:
+  accessModes: [ReadWriteOnce]
+  resources:
+    requests:
+      storage: 5Gi
+  # Set storageClassName if the cluster has no suitable default.
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: drakon
+  namespace: drakon-rf
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: drakon
+  template:
+    metadata:
+      labels:
+        app: drakon
+    spec:
+      automountServiceAccountToken: false
+      terminationGracePeriodSeconds: 30
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: app
+          image: registry.example.invalid/drakon-rf:2026-09-21
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 3100
+          env:
+            - name: PUBLIC_ORIGIN
+              value: https://rf.example.invalid
+            - name: HOST
+              value: 0.0.0.0
+            - name: PORT
+              value: "3100"
+            - name: DATA_DIR
+              value: /state/data
+            - name: ASSETS_DIR
+              value: /state/assets
+            - name: ADMIN_PASSWORD_FILE
+              value: /run/secrets/drakon/password
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: [ALL]
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: "1"
+              memory: 512Mi
+          startupProbe:
+            httpGet:
+              path: /api/info
+              port: http
+            periodSeconds: 5
+            failureThreshold: 60
+          readinessProbe:
+            timeoutSeconds: 5
+            httpGet:
+              path: /api/ready
+              port: http
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /api/info
+              port: http
+            periodSeconds: 20
+            failureThreshold: 3
+          volumeMounts:
+            - name: state
+              mountPath: /state
+            - name: admin-password
+              mountPath: /run/secrets/drakon
+              readOnly: true
+      volumes:
+        - name: state
+          persistentVolumeClaim:
+            claimName: drakon-state
+        - name: admin-password
+          secret:
+            secretName: drakon-admin
+            defaultMode: 0440
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: drakon
+  namespace: drakon-rf
+spec:
+  type: ClusterIP
+  selector:
+    app: drakon
+  ports:
+    - port: 80
+      targetPort: http
+      name: http
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: drakon
+  namespace: drakon-rf
+spec:
+  ingressClassName: REPLACE_WITH_APPROVED_CLASS
+  tls:
+    - hosts: [rf.example.invalid]
+      secretName: drakon-tls
+  rules:
+    - host: rf.example.invalid
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: drakon
+                port:
+                  number: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: drakon-isolation
+  namespace: drakon-rf
+spec:
+  podSelector:
+    matchLabels:
+      app: drakon
+  policyTypes: [Ingress, Egress]
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: REPLACE_WITH_INGRESS_NAMESPACE
+      ports:
+        - protocol: TCP
+          port: 3100
+  egress: []

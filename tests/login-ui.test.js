@@ -1,0 +1,30 @@
+import assert from 'node:assert/strict';
+import {createRequire} from 'node:module';
+import {mkdtemp,rm,mkdir} from 'node:fs/promises';
+import {tmpdir} from 'node:os';import {join,resolve,sep} from 'node:path';import {fileURLToPath} from 'node:url';
+import {createApplication} from '../server/server.js';import {prepareAssets} from '../server/container.js';
+const require=createRequire(import.meta.url),{chromium}=require(process.env.PLAYWRIGHT_MODULE||'playwright');
+const temp=await mkdtemp(join(tmpdir(),'drakon-login-ui-'));let app,browser;
+try {
+ const data=join(temp,'data'),assets=join(temp,'assets');await prepareAssets(assets);
+ app=await createApplication({data,assets,allowHTTP:true});await app.setPassword('login-ui-test-password');await new Promise(r=>app.server.listen(0,'127.0.0.1',r));const base='http://127.0.0.1:'+app.server.address().port;
+ browser=await chromium.launch({channel:'msedge',headless:true});const ctx=await browser.newContext({viewport:{width:390,height:844}}),guestCtx=await browser.newContext({viewport:{width:390,height:844}});const page=await ctx.newPage(),guest=await guestCtx.newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message));guest.on('pageerror',e=>errors.push(e.message));
+ await guest.goto(base);await guest.waitForFunction(()=>document.querySelector('#accessBanner').naturalWidth>0);assert.equal(await guest.locator('#accessTitle').innerText(),'Турнир Лидеров - 2026');assert.ok(!(await guest.locator('#accessGate').innerText()).includes('Группа'));
+ const appearance=await guest.request.get(base+'/api/login-appearance').then(r=>r.json());assert.deepEqual(Object.keys(appearance).sort(),['banner','en','englishEnabled','footer','inputLabel','intro','title']);
+ for(const url of ['/api/content','/site.json','/participants.json','/assets/img/cover.jpg','/assets/login/default.jpg'])assert.equal((await guest.request.get(base+url)).status(),401,url);
+ assert.equal((await guest.request.get(base+'/api/login-banner')).status(),200);
+ await page.goto(base);await page.locator('summary').click();await page.locator('#adminPassword').fill('login-ui-test-password');await page.locator('#adminForm button').click();await page.waitForFunction(()=>S.role==='admin'&&!document.body.classList.contains('access-locked'));
+ await page.locator('[data-view="contacts"]').click();await page.locator('[data-act="brand-edit"]').click();await page.locator('#loginTitle').fill('Тестовый Турнир <2026>');await page.locator('#loginIntro').fill('Текст приглашения\nВторая строка <b>без HTML</b>');await page.locator('#loginInputLabel').fill('Ваш персональный код');await page.locator('#bfoot').fill('Общая подпись');await page.evaluate(()=>flushPending());
+ const png=await page.evaluate(async()=>{const c=document.createElement('canvas');c.width=1400;c.height=500;c.getContext('2d').fillRect(0,0,1400,500);return c.toDataURL('image/png').split(',')[1];});
+ await page.locator('#loginBannerFile').setInputFiles({name:'banner.png',mimeType:'image/png',buffer:Buffer.from(png,'base64')});await page.waitForFunction(()=>S.site.login.banner.includes('upload-'));await page.evaluate(()=>flushPending());
+ await guest.reload();await guest.waitForFunction(()=>document.querySelector('#accessTitle').textContent==='Тестовый Турнир <2026>');await guest.waitForFunction(()=>document.querySelector('#accessBanner').naturalWidth===1400);assert.equal(await guest.locator('[data-site-footer]').first().innerText(),'Общая подпись');
+ assert.equal(await guest.locator('#accessIntro').innerText(),'Текст приглашения\nВторая строка <b>без HTML</b>');assert.equal(await guest.locator('#accessIntro b').count(),0);assert.equal(await guest.locator('#inviteLabel').innerText(),'Ваш персональный код');
+ const published=await guest.request.get(base+'/api/login-appearance').then(r=>r.json());assert.ok(!JSON.stringify(published).includes('contacts'));
+ const bad=await page.evaluate(async()=>{const copy=structuredClone(S.site);copy.login.banner='assets/people/private.jpg';return (await fetch('/api/site',{method:'PUT',headers:{'content-type':'application/json'},body:JSON.stringify(copy)})).status;});assert.equal(bad,400);
+ await page.locator('[data-act="site-off"]').click();await page.locator('[data-act="site-edit"]').click();await page.locator('#contactNote').fill('Новый текст связи\nВторая строка <b>без HTML</b>');await page.evaluate(()=>flushPending());await page.locator('[data-act="site-off"]').click();assert.equal(await page.locator('.contact-note').innerText(),'Новый текст связи\nВторая строка <b>без HTML</b>');assert.equal(await page.locator('.contact-note b').count(),0);
+ for(const view of ['program','people','contacts']){await page.locator('[data-view="'+view+'"]').click();assert.equal(await page.locator('.foot [data-site-footer]').innerText(),'Общая подпись');}
+ await page.reload();await page.waitForFunction(()=>S.role==='admin');assert.equal(await page.evaluate(()=>S.site.contactNote),'Новый текст связи\nВторая строка <b>без HTML</b>');
+ const screenshots=new URL('./screenshots/',import.meta.url);await mkdir(screenshots,{recursive:true});await guest.screenshot({path:fileURLToPath(new URL('login-custom.png',screenshots)),fullPage:true});
+ await page.evaluate(()=>{S.siteEdit='brand';showView('contacts')});await page.locator('#removeLoginBanner').click();await page.evaluate(()=>flushPending());await guest.reload();await guest.waitForFunction(()=>document.querySelector('#accessBanner').hidden);assert.equal((await guest.request.get(base+'/api/login-banner')).status(),404);
+ assert.equal((await guest.request.get(base+'/api/content')).status(),401);assert.deepEqual(errors,[]);console.log('PASS: public appearance allowlist, private content closed, title/footer editing, banner upload/removal, plain contact text, persistence');
+}finally{if(browser)await browser.close();if(app?.server.listening)await new Promise(r=>app.server.close(r));assert.ok(resolve(temp).startsWith(resolve(tmpdir())+sep+'drakon-login-ui-'));await rm(temp,{recursive:true,force:true});}

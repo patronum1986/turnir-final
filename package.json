@@ -1,0 +1,12 @@
+{
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "start": "node server/server.js",
+    "test": "node tests/csv-houses.test.js && node tests/security.test.js && node tests/container.test.js",
+    "test:browser": "node tests/review-regressions.test.js && node tests/language-disabled.test.js && node tests/app-icons.test.js && node tests/admin-prompt.test.js && node tests/banner-languages.test.js && node tests/inline-admin.test.js && node tests/english.test.js && node tests/review-fixes.test.js && node tests/browser.test.js && node tests/contacts.test.js && node tests/login-ui.test.js"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

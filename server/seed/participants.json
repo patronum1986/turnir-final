@@ -1,0 +1,27 @@
+{
+  "updated": "2026-09-14",
+  "people": [
+    {
+      "id": "ex1",
+      "name": "Пример Участника",
+      "bank": "Пример: Банк А",
+      "photo": "",
+      "code": "test1",
+      "name_en": "Example Participant",
+      "name_en_auto": false,
+      "bank_en": "Example: Bank A",
+      "language": "ru"
+    },
+    {
+      "id": "ex2",
+      "name": "Пример Второго",
+      "bank": "Пример: Банк А",
+      "photo": "",
+      "code": "test2",
+      "name_en": "Second Example",
+      "name_en_auto": false,
+      "bank_en": "Example: Bank A",
+      "language": "ru"
+    }
+  ]
+}

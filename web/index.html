@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Турнир Лидеров - 2026</title>
+<meta name="theme-color" content="#FF0A3C">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Путь Дракона">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="assets/favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="access-locked">
+  <nav id="languageControl" class="language-control" aria-label="Language" hidden></nav>
+  <p id="editingLanguage" class="editing-language" hidden></p>
+  <section id="accessGate" class="access-gate">
+    <div id="accessBannerWrap" class="access-banner-wrap"><img id="accessBanner" class="access-banner" src="/api/login-banner" alt="" hidden></div><h1 id="accessTitle">Турнир Лидеров - 2026</h1><p id="accessIntro">Откройте приглашение или войдите как организатор. Для первого входа нужен интернет.</p><p id="accessMessage" role="status"></p>
+    <form id="inviteForm"><label id="inviteLabel" for="inviteInput">Персональная ссылка или код</label><input id="inviteInput" type="text" autocomplete="off" required><button class="btn" type="submit">Войти по приглашению</button></form>
+    <details><summary>Вход организатора</summary><form id="adminForm"><label for="adminPassword">Пароль организатора</label><input id="adminPassword" type="password" autocomplete="current-password" required><button class="btn" type="submit">Войти</button></form></details>
+    <p class="access-footer" data-site-footer>Турнир Лидеров 2026</p>
+  </section>
+  <header class="cover" id="cover">
+    <img  alt="Путь Дракона — Турнир лидеров 2026" draggable="false">
+  </header>
+
+  <main>
+    <section id="view-program">
+      <div class="status" id="status" aria-live="polite"></div>
+      <div id="myhouse" hidden></div>
+      <nav class="tabs" id="tabs" aria-label="Дни поездки"></nav>
+      <div id="day"></div>
+    </section>
+    <section id="view-people" hidden></section>
+    <section id="view-contacts" hidden></section>
+  </main>
+
+  <footer class="foot">
+    <p data-site-footer>Турнир Лидеров 2026</p>
+    <button type="button" class="linkbtn" id="forgetDevice">Выйти и удалить данные с устройства</button>
+    <p class="foot-ver" id="ver"></p>
+  </footer>
+
+  <div class="player" id="player" hidden>
+    <div class="pl-row">
+      <img class="pl-thumb" id="plThumb" alt="">
+      <div class="pl-text">
+        <div class="pl-title" id="plTitle"></div>
+        <div class="pl-sub" id="plSub"></div>
+      </div>
+      <button class="pl-btn pl-main" id="plToggle" aria-label="Пауза">
+        <svg class="i-play" viewBox="0 0 24 24"><path d="M8 5.5v13l10.5-6.5z"/></svg>
+        <svg class="i-pause" viewBox="0 0 24 24"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/></svg>
+      </button>
+    </div>
+    <div class="pl-seek">
+      <button class="pl-btn" id="plBack" aria-label="Назад на 15 секунд">
+        <svg viewBox="0 0 24 24"><path d="M12 5V2L7 6l5 4V7a6 6 0 1 1-6 6H4a8 8 0 1 0 8-8z"/><text x="12" y="16.2" text-anchor="middle">15</text></svg>
+      </button>
+      <span id="plCur">0:00</span>
+      <input type="range" id="plRange" min="0" max="1000" value="0" aria-label="Перемотка">
+      <span id="plDur">0:00</span>
+      <button class="pl-btn" id="plFwd" aria-label="Вперёд на 15 секунд">
+        <svg viewBox="0 0 24 24"><path d="M12 5V2l5 4-5 4V7a6 6 0 1 0 6 6h2a8 8 0 1 1-8-8z"/><text x="12" y="16.2" text-anchor="middle">15</text></svg>
+      </button>
+    </div>
+  </div>
+
+  <nav class="nav" aria-label="Разделы">
+    <button data-view="program" aria-current="page"><svg viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 16H5V9h14zM7 11h4v4H7z"/></svg>Программа</button>
+    <button data-view="people" aria-current="false"><svg viewBox="0 0 24 24"><path d="M16 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-8 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0 2c-2.3 0-7 1.2-7 3.5V19h14v-2.5C15 14.2 10.3 13 8 13zm8 0c-.3 0-.6 0-1 .1 1.2.8 2 2 2 3.4V19h6v-2.5c0-2.3-4.7-3.5-7-3.5z"/></svg>Участники</button>
+    <button data-view="contacts" aria-current="false"><svg viewBox="0 0 24 24"><path d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25c1.1.37 2.3.57 3.6.57a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg>Контакты</button>
+  </nav>
+
+  <div class="ceremony" id="ceremony" hidden></div>
+
+  <div class="toast" id="toast" role="status" hidden></div>
+
+  <script src="i18n.js"></script>
+  <script src="english.js"></script>
+  <script src="app.js"></script>
+  <script src="app-icons.js"></script>
+</body>
+</html>

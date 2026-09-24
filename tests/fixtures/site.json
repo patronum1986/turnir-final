@@ -1,0 +1,48 @@
+{
+ "updated": "2026-09-14",
+ "brand": {
+  "cover": "assets/img/cover.jpg",
+  "footer": "Турнир лидеров 2026",
+  "sections": {
+   "people": true,
+   "contacts": true
+  }
+ },
+ "contacts": [
+  {
+   "name": "Имя Фамилия",
+   "role": "Руководитель поездки",
+   "phone": "+7 900 000-00-00",
+   "wechat": "wechat_id",
+   "telegram": "username"
+  },
+  {
+   "name": "Имя Фамилия",
+   "role": "Координатор группы",
+   "phone": "+7 900 000-00-00",
+   "wechat": "wechat_id",
+   "telegram": ""
+  },
+  {
+   "name": "Имя Фамилия",
+   "role": "Гид на месте, говорит по-русски",
+   "phone": "+86 130 0000 0000",
+   "wechat": "wechat_id",
+   "telegram": ""
+  }
+ ],
+ "places": [
+  {
+   "name": "Hilton Beijing Wangfujing",
+   "zh": "北京王府井希尔顿酒店",
+   "note": "Пекин, 25–27 и 30–31 октября",
+   "phone": ""
+  },
+  {
+   "name": "Raffles Clear Water Bay",
+   "zh": "海南清水湾莱佛士度假酒店",
+   "note": "Санья, 27–30 октября",
+   "phone": ""
+  }
+ ]
+}

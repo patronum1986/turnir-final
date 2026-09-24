@@ -1,0 +1,58 @@
+{
+ "updated": "2026-09-14",
+ "enabled": true,
+ "ceremony": {
+  "cardTitle": "Путешествие начинается прямо сейчас",
+  "cardText": "Выберите свой Дом Дракона.",
+  "cardButton": "Тянуть жребий",
+  "title": "Жребий Дракона",
+  "intro": "Пять Домов ждут своих людей. Каждый год Дракон сам выбирает, кому под чьим знаменем идти. Перед вами пять свитков — все одинаковы, и лишь один ваш.",
+  "introButton": "Я готов",
+  "pick": "Выберите свиток",
+  "result": "Ваш дом",
+  "button": "В путь",
+  "scrollImg": "assets/houses/scroll.webp"
+ },
+ "houses": [
+  {
+   "id": "jade",
+   "name": "Дом Нефритового Дракона",
+   "motto": "Истинная ценность — внутри.",
+   "color": "#1E8A5B",
+   "icon": "assets/houses/jade.webp"
+  },
+  {
+   "id": "gold",
+   "name": "Дом Золотого Дракона",
+   "motto": "Стремимся к большему.",
+   "color": "#C9931A",
+   "icon": "assets/houses/gold.webp"
+  },
+  {
+   "id": "sky",
+   "name": "Дом Небесного Дракона",
+   "motto": "Для нас нет недостижимых высот.",
+   "color": "#3F8FD6",
+   "icon": "assets/houses/sky.webp"
+  },
+  {
+   "id": "fire",
+   "name": "Дом Огненного Дракона",
+   "motto": "Энергия превращает идеи в действие.",
+   "color": "#E0301E",
+   "icon": "assets/houses/fire.webp"
+  },
+  {
+   "id": "wise",
+   "name": "Дом Мудрого Дракона",
+   "motto": "Видеть главное. Выбирать верное.",
+   "color": "#4A3AA8",
+   "icon": "assets/houses/wise.webp"
+  }
+ ],
+ "assign": {
+  "test1": "fire",
+  "test2": "jade",
+  "test3": "sky"
+ }
+}

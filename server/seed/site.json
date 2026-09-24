@@ -1,0 +1,42 @@
+{
+  "updated": "2026-09-14",
+  "brand": {
+    "cover": "assets/img/cover.jpg",
+    "footer": "Турнир Лидеров 2026. Путь Дракона.",
+    "sections": {
+      "people": true,
+      "contacts": true
+    }
+  },
+  "contacts": [
+    {
+      "name": "Анна Орг",
+      "role": "Организатор",
+      "phone": "+79231255468",
+      "wechat": "@nataliy658",
+      "telegram": "@nataliy658"
+    }
+  ],
+  "places": [
+    {
+      "name": "Shanghai Grand Central 5*",
+      "zh": "",
+      "note": "Шанхай, 19–21 октября",
+      "phone": ""
+    },
+    {
+      "name": "Marriott Yalong Bay 5*",
+      "zh": "",
+      "note": "Хайнань, 21–24 октября",
+      "phone": ""
+    }
+  ],
+  "login": {
+    "intro": "Войдите по персональному коду. Для первого входа нужен интернет.",
+    "inputLabel": "Персональная ссылка или код",
+    "title": "Турнир Лидеров - 2026",
+    "banner": "assets/login/default.jpg"
+  },
+  "contactNote": "",
+  "englishEnabled": false
+}
